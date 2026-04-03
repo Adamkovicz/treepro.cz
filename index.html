@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TreePro – Arboristika</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-light: #dde8d8;
+      --green-mid: #a8bfa0;
+      --green-dark: #5a7a52;
+      --brown: #7a2e0e;
+      --brown-light: #a84320;
+      --cream: #f5f0e8;
+      --white: #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--green-light);
+      color: #2a2a2a;
+      overflow-x: hidden;
+    }
+
+    /* ─── HERO ─── */
+    header {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(160deg, #c8dbbf 0%, #dde8d8 40%, #c5d6bc 100%);
+    }
+
+    .rings {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .rings svg {
+      position: absolute;
+      opacity: 0.18;
+    }
+    .rings svg:nth-child(1) { top: -120px; left: -120px; width: 420px; }
+    .rings svg:nth-child(2) { bottom: -100px; right: -100px; width: 380px; }
+    .rings svg:nth-child(3) { top: 40%; left: 70%; width: 200px; opacity: 0.10; }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 1s ease both;
+    }
+
+    .site-url {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.35em;
+      font-size: 0.85rem;
+      color: var(--green-dark);
+      margin-bottom: 2rem;
+      text-transform: lowercase;
+    }
+
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-svg {
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 6.5rem);
+      font-weight: 900;
+      color: var(--brown);
+      line-height: 0.95;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .tagline {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.55em;
+      font-size: clamp(0.75rem, 2vw, 1rem);
+      color: var(--green-dark);
+      text-transform: uppercase;
+      margin-top: 0.8rem;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--brown-light);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin-top: 1.5rem;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--green-dark);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint span { display: block; width: 1px; height: 50px; background: var(--green-dark); margin: 0 auto; opacity: 0.5; }
+
+    /* ─── SERVICES ─── */
+    .services {
+      background: var(--cream);
+      padding: 7rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .services::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--green-mid), var(--brown-light), var(--green-dark));
+    }
+
+    .section-label {
+      text-align: center;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      font-size: 0.75rem;
+      color: var(--green-dark);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--brown);
+      margin-bottom: 4rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 2px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-bottom: 4px solid var(--green-mid);
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(90,122,82,0.15);
+      border-bottom-color: var(--brown-light);
+    }
+
+    .card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--brown);
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #555;
+      font-weight: 300;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 60px; height: 60px;
+      background: var(--green-light);
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+      opacity: 0.6;
+    }
+
+    /* ─── WHY ─── */
+    .why {
+      background: var(--brown);
+      color: var(--cream);
+      padding: 7rem 2rem;
+      text-align: center;
+    }
+
+    .why .section-label { color: var(--green-mid); }
+    .why .section-title { color: var(--cream); }
+
+    .why-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .why-item {
+      flex: 1 1 160px;
+      max-width: 200px;
+    }
+
+    .why-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      color: var(--green-mid);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .why-item p {
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact {
+      background: var(--green-light);
+      padding: 7rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact .section-title { margin-bottom: 3rem; }
+
+    .contact-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-card {
+      background: var(--white);
+      padding: 2rem 2.5rem;
+      flex: 1 1 220px;
+      border-left: 5px solid var(--brown-light);
+    }
+
+    .contact-card .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--brown);
+      margin-bottom: 0.4rem;
+    }
+
+    .contact-card a {
+      font-size: 1rem;
+      color: var(--brown-light);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .contact-card a:hover { text-decoration: underline; }
+
+    .email-block {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+    }
+    .email-block a {
+      color: var(--brown);
+      text-decoration: none;
+      font-weight: 700;
+      border-bottom: 2px solid var(--green-mid);
+      padding-bottom: 2px;
+    }
+    .email-block a:hover { border-color: var(--brown); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #2a2a2a;
+      color: var(--green-mid);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(10px); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .logo-block { flex-direction: column; gap: 1rem; }
+      .brand-text h1 { text-align: center; }
+      .tagline { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header>
+  <div class="rings">
+    <!-- Decorative ring SVGs -->
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" style="top:-80px;left:-80px;width:380px;">
+      <circle cx="150" cy="150" r="140" fill="none" stroke="#5a7a52" stroke-width="14"/>
+      <circle cx="150" cy="150" r="110" fill="none" stroke="#5a7a52" stroke-width="10"/>
+      <circle cx="150" cy="150" r="80"  fill="none" stroke="#5a7a52" stroke-width="7"/>
+      <circle cx="150" cy="150" r="50"  fill="none" stroke="#5a7a52" stroke-width="5"/>
+    </svg>
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" style="bottom:-80px;right:-80px;width:340px;">
+      <circle cx="150" cy="150" r="140" fill="none" stroke="#5a7a52" stroke-width="14"/>
+      <circle cx="150" cy="150" r="110" fill="none" stroke="#5a7a52" stroke-width="10"/>
+      <circle cx="150" cy="150" r="80"  fill="none" stroke="#5a7a52" stroke-width="7"/>
+    </svg>
+    <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" style="top:30%;left:65%;width:180px;">
+      <circle cx="150" cy="150" r="140" fill="none" stroke="#5a7a52" stroke-width="12"/>
+      <circle cx="150" cy="150" r="100" fill="none" stroke="#5a7a52" stroke-width="8"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="site-url">www.treepro.cz</p>
+
+    <div class="logo-block">
+      <!-- TreePro logo SVG (replicated from flyer style) -->
+      <svg class="logo-svg" viewBox="0 0 110 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hat / roof -->
+        <rect x="20" y="12" width="70" height="12" rx="2" fill="#7a2e0e"/>
+        <!-- Vertical trunk -->
+        <rect x="48" y="24" width="14" height="55" rx="2" fill="#7a2e0e"/>
+        <!-- Horizontal cross bar -->
+        <rect x="20" y="44" width="70" height="11" rx="2" fill="#7a2e0e"/>
+        <!-- Leaf circle -->
+        <circle cx="28" cy="90" r="20" fill="none" stroke="#a8bfa0" stroke-width="6"/>
+        <circle cx="28" cy="90" r="11" fill="none" stroke="#a8bfa0" stroke-width="4"/>
+      </svg>
+
+      <div class="brand-text">
+        <h1>TreePro</h1>
+        <p class="tagline">Arboristika</p>
+      </div>
+    </div>
+
+    <p class="hero-sub">Profesionální péče o stromy a zeleň</p>
+  </div>
+
+  <div class="scroll-hint">
+    <span></span>
+    naše služby
+  </div>
+</header>
+
+<!-- SERVICES -->
+<section class="services">
+  <p class="section-label reveal">Co nabízíme</p>
+  <h2 class="section-title reveal">Naše arboristické služby</h2>
+
+  <div class="grid">
+    <div class="card reveal">
+      <span class="card-icon">🌳</span>
+      <h3>Péče o stromy a zeleň</h3>
+      <p>Komplexní péče o vaše stromy a okolní zeleň. Pravidelná údržba, konzultace a odborné posouzení stavu dřevin.</p>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🪓</span>
+      <h3>Rizikové kácení</h3>
+      <p>Bezpečné pokácení nebezpečných nebo poškozených stromů s využitím lezeckých technik a odborného vybavení.</p>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">✂️</span>
+      <h3>Bezpečnostní, výchovné a zdravotní řezy</h3>
+      <p>Odborné prořezávání korun pro zlepšení zdraví, stability a estetiky stromu. Výchovné řezy mladých dřevin.</p>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🪵</span>
+      <h3>Frézování a štěpkování</h3>
+      <p>Odfrézování pařezů a zpracování dřevní hmoty do štěpky. Ekologická likvidace vzniklého odpadu.</p>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🔗</span>
+      <h3>Bezpečnostní vazby</h3>
+      <p>Instalace dynamických i statických vazeb pro zajištění nestabilních kosterních větví a prodloužení životnosti stromů.</p>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🔍</span>
+      <h3>Odborné hodnocení dřevin</h3>
+      <p>Certifikované posudky stavu stromů, hodnocení rizik a doporučení dalšího postupu péče nebo kácení.</p>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🌿</span>
+      <h3>Údržba zahrad</h3>
+      <p>Pravidelná péče o zahrady, záhony a travnaté plochy. Sezónní práce a celkové zahradnické služby.</p>
+    </div>
+    <div class="card reveal">
+      <span class="card-icon">🌱</span>
+      <h3>Výsadba stromů</h3>
+      <p>Výběr vhodných druhů, profesionální výsadba a záruční péče o nově vysazené stromy a keře.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY TREEPRO -->
+<section class="why">
+  <p class="section-label reveal">Proč TreePro</p>
+  <h2 class="section-title reveal">Stromy jsou naše vášeň</h2>
+  <div class="why-grid">
+    <div class="why-item reveal">
+      <div class="why-num">✓</div>
+      <p>Certifikovaní arboristé s odborným vzděláním</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">✓</div>
+      <p>Moderní lezecká technika a vybavení</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">✓</div>
+      <p>Pojištění odpovědnosti za škody</p>
+    </div>
+    <div class="why-item reveal">
+      <div class="why-num">✓</div>
+      <p>Rychlá odezva a individuální přístup</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="kontakt">
+  <div class="contact-inner">
+    <p class="section-label reveal">Kontaktujte nás</p>
+    <h2 class="section-title reveal">Domluvte si konzultaci</h2>
+
+    <div class="contact-cards">
+      <div class="contact-card reveal">
+        <p class="name">Josef Morc</p>
+        <a href="tel:+420608809881">+420 608 809 881</a>
+      </div>
+      <div class="contact-card reveal">
+        <p class="name">Adam Antonín</p>
+        <a href="tel:+420605962266">+420 605 962 266</a>
+      </div>
+    </div>
+
+    <div class="email-block reveal">
+      ✉ <a href="mailto:info@treepro.cz">info@treepro.cz</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 TreePro &nbsp;·&nbsp; www.treepro.cz &nbsp;·&nbsp; Arboristika</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
