@@ -1,221 +1,162 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TreePro - Arboristika | Střední Čechy</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Boogaloo&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:       #e6ede0;
-      --green-lt: #c5d4bc;
-      --green-md: #a8bfa0;
-      --green-dk: #5a7a52;
-      --brown:    #8b3210;
-      --brown-lt: #b84a1e;
-      --cream:    #f5f1e8;
-      --white:    #ffffff;
-      --dark:     #252015;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--dark); overflow-x: hidden; }
-
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      background: rgba(230,237,224,0.97); backdrop-filter: blur(10px);
-      border-bottom: 3px solid var(--green-md);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.45rem 2rem; gap: 1rem;
-    }
-    .nav-brand { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-    .nav-brand img { height: 52px; width: auto; }
-    .nav-brand-name { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.45rem; color: var(--brown); letter-spacing: 0.02em; line-height: 1; }
-    .nav-links { display: flex; gap: 0.2rem; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
-    .nav-links a { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem; letter-spacing: 0.03em; text-decoration: none; color: var(--brown); padding: 0.38rem 0.82rem; border-radius: 50px; border: 2px solid transparent; transition: all .2s; white-space: nowrap; }
-    .nav-links a:hover, .nav-links a.act { background: var(--brown); color: var(--cream); }
-    .nav-ig { background: linear-gradient(135deg,#f09433,#dc2743,#bc1888) !important; color: #fff !important; display: inline-flex !important; align-items: center; gap: 0.35rem; }
-    .nav-ig:hover { opacity: .88 !important; }
-
-    #uvod {
-      min-height: 100vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center;
-      padding: 8rem 2rem 5rem; position: relative; overflow: hidden;
-      background: linear-gradient(168deg,#d0dcca 0%,#e6ede0 48%,#cad6c2 100%);
-    }
-    .pd { position: absolute; pointer-events: none; }
-    .hero-url { font-family: 'Boogaloo', cursive; font-size: clamp(1.1rem, 2.8vw, 1.6rem); color: var(--green-dk); letter-spacing: 0.14em; margin-bottom: 1.6rem; opacity: 0; animation: up .8s .1s both; }
-    .hero-logo-wrap { opacity: 0; animation: up .9s .25s both; margin-bottom: 1.8rem; }
-    .hero-logo-wrap img { width: clamp(180px, 30vw, 280px); filter: drop-shadow(0 8px 24px rgba(139,50,16,.15)); }
-    .hero-h1 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: clamp(2.4rem, 7vw, 5rem); color: var(--brown); line-height: 1.1; opacity: 0; animation: up .9s .42s both; }
-    .hero-sub { font-size: clamp(0.95rem,2vw,1.15rem); font-weight: 400; color: var(--green-dk); margin-top: 1rem; max-width: 560px; line-height: 1.75; opacity: 0; animation: up .9s .58s both; }
-    .hero-cta { display: inline-block; margin-top: 2.2rem; background: var(--brown); color: var(--cream); font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: 0.03em; padding: .9rem 2.5rem; border-radius: 50px; text-decoration: none; box-shadow: 0 6px 24px rgba(139,50,16,.28); opacity: 0; animation: up .9s .72s both; transition: background .2s, transform .2s; }
-    .hero-cta:hover { background: var(--brown-lt); transform: translateY(-3px); }
-    .hero-scroll { position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--green-dk); display: flex; flex-direction: column; align-items: center; gap: .35rem; animation: bounce 2.2s infinite; }
-    .hero-scroll::after { content:'↓'; font-size: 1.3rem; }
-
-    section { padding: 6rem 2rem; position: relative; overflow: hidden; }
-    .si { max-width: 1100px; margin: 0 auto; }
-    .eye { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .7rem; letter-spacing: .42em; text-transform: uppercase; color: var(--green-dk); margin-bottom: .4rem; }
-    .stitle { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: clamp(1.9rem,4.5vw,2.8rem); color: var(--brown); line-height: 1.15; margin-bottom: .9rem; }
-    .slead { font-size: 1rem; font-weight: 400; color: #446; max-width: 680px; line-height: 1.88; margin-bottom: 3rem; }
-    .top-bar { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg,var(--green-md),var(--brown-lt),var(--green-dk)); }
-
-    #sluzby { background: var(--cream); }
-    .svc-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(255px,1fr)); gap: 1.4rem; }
-    .svc { background: var(--white); padding: 1.9rem 1.7rem; border-bottom: 4px solid var(--green-md); position: relative; overflow: hidden; transition: transform .25s, box-shadow .25s, border-color .25s; }
-    .svc:hover { transform: translateY(-5px); box-shadow: 0 14px 38px rgba(90,122,82,.13); border-bottom-color: var(--brown-lt); }
-    .svc::after { content:''; position: absolute; top: 0; right: 0; width: 44px; height: 44px; background: var(--bg); clip-path: polygon(100% 0,0 0,100% 100%); }
-    .svc-ico { font-size: 2rem; margin-bottom: .7rem; display: block; }
-    .svc h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.1rem; color: var(--brown); margin-bottom: .45rem; }
-    .svc p { font-size: .87rem; line-height: 1.72; color: #557; font-weight: 400; }
-
-    #o-nas { background: var(--bg); }
-    .onas-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-    .onas-art { display: flex; justify-content: center; }
-    .onas-art svg { width: 100%; max-width: 360px; }
-    .hlbox { background: var(--brown); color: var(--cream); padding: 1.4rem 1.8rem; margin-top: 1.8rem; font-size: .94rem; line-height: 1.78; font-weight: 400; }
-    .badges { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.8rem; }
-    .badge { background: var(--green-lt); color: var(--green-dk); font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .8rem; padding: .35rem .9rem; border-radius: 50px; }
-
-    #reference { background: var(--cream); }
-
-    #proc-my { background: var(--bg); }
-    .proc-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(185px,1fr)); gap: 1.8rem; }
-    .proc { text-align: center; padding: 1.8rem 1rem; }
-    .proc-ico { font-size: 2.6rem; margin-bottom: .9rem; display: block; }
-    .proc h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.05rem; color: var(--brown); margin-bottom: .45rem; }
-    .proc p { font-size: .84rem; line-height: 1.65; color: #557; font-weight: 400; }
-
-    #kontakt { background: var(--bg); }
-    .kontakt-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-    .ccard { background: var(--white); border-left: 6px solid var(--brown-lt); padding: 1.6rem 2rem; margin-bottom: 1.1rem; }
-    .ccard .cn { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.2rem; color: var(--brown); margin-bottom: .25rem; }
-    .ccard a { font-size: 1.05rem; font-weight: 700; color: var(--brown-lt); text-decoration: none; }
-    .ccard a:hover { text-decoration: underline; }
-    .email-row { background: var(--brown); color: var(--cream); padding: 1.25rem 2rem; display: flex; align-items: center; gap: .8rem; margin-bottom: 1.1rem; }
-    .email-row a { color: var(--cream); font-weight: 700; font-size: 1rem; text-decoration: none; }
-    .email-row a:hover { text-decoration: underline; }
-    .ig-btn { display: inline-flex; align-items: center; gap: .55rem; background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color: #fff; padding: .7rem 1.6rem; border-radius: 50px; text-decoration: none; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .95rem; transition: opacity .2s, transform .2s; }
-    .ig-btn:hover { opacity: .88; transform: translateY(-2px); }
-    .kright { background: var(--green-dk); color: var(--cream); padding: 2.5rem; position: relative; overflow: hidden; }
-    .kright h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.6rem; margin-bottom: 1rem; }
-    .kright p { font-size: .93rem; line-height: 1.88; opacity: .9; }
-    .kright .kpd { position: absolute; bottom: -50px; right: -50px; opacity: .1; }
-
-    footer { background: var(--dark); color: var(--green-md); padding: 2rem; text-align: center; }
-    .footer-url { font-family: 'Boogaloo', cursive; font-size: 1.5rem; color: var(--green-lt); letter-spacing: .14em; display: block; margin-bottom: .4rem; }
-    footer p { font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; opacity: .5; }
-
-    @keyframes up { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: none; } }
-    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(9px); } }
-    .rv { opacity:0; transform:translateY(24px); transition: opacity .65s ease, transform .65s ease; }
-    .rv.v { opacity:1; transform:none; }
-
-    @media(max-width:780px){ .onas-wrap,.kontakt-wrap { grid-template-columns:1fr; } .onas-art { display:none; } }
-    @media(max-width:520px){ .nav-links { display:none; } }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TreePro - Arboristika | Stredni Cechy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Boogaloo&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e6ede0;--glt:#c5d4bc;--gmd:#a8bfa0;--gdk:#5a7a52;--br:#8b3210;--brl:#b84a1e;--cr:#f5f1e8;--wh:#ffffff;--dk:#252015}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--dk);overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(230,237,224,.97);backdrop-filter:blur(10px);border-bottom:3px solid var(--gmd);display:flex;align-items:center;justify-content:space-between;padding:.45rem 2rem;gap:1rem}
+.nb{display:flex;align-items:center;gap:.5rem;text-decoration:none}
+.nb img{height:52px;width:auto}
+.nb-n{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.45rem;color:var(--br);letter-spacing:.02em;line-height:1}
+.nl{display:flex;gap:.2rem;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.nl a{font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;letter-spacing:.03em;text-decoration:none;color:var(--br);padding:.38rem .82rem;border-radius:50px;border:2px solid transparent;transition:all .2s;white-space:nowrap}
+.nl a:hover,.nl a.act{background:var(--br);color:var(--cr)}
+.ig{background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)!important;color:#fff!important;display:inline-flex!important;align-items:center;gap:.35rem}
+.ig:hover{opacity:.88!important}
+#uvod{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 5rem;position:relative;overflow:hidden;background:linear-gradient(168deg,#d0dcca 0%,#e6ede0 48%,#cad6c2 100%)}
+.pd{position:absolute;pointer-events:none}
+.hu{font-family:'Boogaloo',cursive;font-size:clamp(1.1rem,2.8vw,1.6rem);color:var(--gdk);letter-spacing:.14em;margin-bottom:1.6rem;opacity:0;animation:up .8s .1s both}
+.hl{opacity:0;animation:up .9s .25s both;margin-bottom:1.8rem}
+.hl img{width:clamp(180px,30vw,280px);filter:drop-shadow(0 8px 24px rgba(139,50,16,.15))}
+.hh{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(2.4rem,7vw,5rem);color:var(--br);line-height:1.1;opacity:0;animation:up .9s .42s both}
+.hs{font-size:clamp(.95rem,2vw,1.15rem);font-weight:400;color:var(--gdk);margin-top:1rem;max-width:560px;line-height:1.75;opacity:0;animation:up .9s .58s both}
+.hc{display:inline-block;margin-top:2.2rem;background:var(--br);color:var(--cr);font-family:'Nunito',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:.03em;padding:.9rem 2.5rem;border-radius:50px;text-decoration:none;box-shadow:0 6px 24px rgba(139,50,16,.28);opacity:0;animation:up .9s .72s both;transition:background .2s,transform .2s}
+.hc:hover{background:var(--brl);transform:translateY(-3px)}
+.hsc{position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);font-family:'Nunito',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gdk);display:flex;flex-direction:column;align-items:center;gap:.35rem;animation:bounce 2.2s infinite}
+.hsc::after{content:'↓';font-size:1.3rem}
+section{padding:6rem 2rem;position:relative;overflow:hidden}
+.si{max-width:1100px;margin:0 auto}
+.eye{font-family:'Nunito',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gdk);margin-bottom:.4rem}
+.st{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(1.9rem,4.5vw,2.8rem);color:var(--br);line-height:1.15;margin-bottom:.9rem}
+.sl{font-size:1rem;font-weight:400;color:#446;max-width:680px;line-height:1.88;margin-bottom:3rem}
+.tb{position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--gmd),var(--brl),var(--gdk))}
+#sluzby{background:var(--cr)}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1.4rem}
+.sv{background:var(--wh);padding:1.9rem 1.7rem;border-bottom:4px solid var(--gmd);position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s}
+.sv:hover{transform:translateY(-5px);box-shadow:0 14px 38px rgba(90,122,82,.13);border-bottom-color:var(--brl)}
+.sv::after{content:'';position:absolute;top:0;right:0;width:44px;height:44px;background:var(--bg);clip-path:polygon(100% 0,0 0,100% 100%)}
+.si2{font-size:2rem;margin-bottom:.7rem;display:block}
+.sv h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;color:var(--br);margin-bottom:.45rem}
+.sv p{font-size:.87rem;line-height:1.72;color:#557;font-weight:400}
+#o-nas{background:var(--bg)}
+.ow{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.oa{display:flex;justify-content:center}
+.oa svg{width:100%;max-width:360px}
+.hb{background:var(--br);color:var(--cr);padding:1.4rem 1.8rem;margin-top:1.8rem;font-size:.94rem;line-height:1.78;font-weight:400}
+.bg{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.8rem}
+.ba{background:var(--glt);color:var(--gdk);font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;padding:.35rem .9rem;border-radius:50px}
+#reference{background:var(--cr)}
+#proc-my{background:var(--bg)}
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:1.8rem}
+.pi{text-align:center;padding:1.8rem 1rem}
+.pi2{font-size:2.6rem;margin-bottom:.9rem;display:block}
+.pi h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:var(--br);margin-bottom:.45rem}
+.pi p{font-size:.84rem;line-height:1.65;color:#557;font-weight:400}
+#kontakt{background:var(--bg)}
+.kw{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.cc{background:var(--wh);border-left:6px solid var(--brl);padding:1.6rem 2rem;margin-bottom:1.1rem}
+.cc .cn{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.2rem;color:var(--br);margin-bottom:.25rem}
+.cc a{font-size:1.05rem;font-weight:700;color:var(--brl);text-decoration:none}
+.cc a:hover{text-decoration:underline}
+.er{background:var(--br);color:var(--cr);padding:1.25rem 2rem;display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem}
+.er a{color:var(--cr);font-weight:700;font-size:1rem;text-decoration:none}
+.er a:hover{text-decoration:underline}
+.ib{display:inline-flex;align-items:center;gap:.55rem;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;padding:.7rem 1.6rem;border-radius:50px;text-decoration:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;transition:opacity .2s,transform .2s}
+.ib:hover{opacity:.88;transform:translateY(-2px)}
+.kr{background:var(--gdk);color:var(--cr);padding:2.5rem;position:relative;overflow:hidden}
+.kr h3{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.6rem;margin-bottom:1rem}
+.kr p{font-size:.93rem;line-height:1.88;opacity:.9}
+.kp{position:absolute;bottom:-50px;right:-50px;opacity:.1}
+footer{background:var(--dk);color:var(--gmd);padding:2rem;text-align:center}
+.fu{font-family:'Boogaloo',cursive;font-size:1.5rem;color:var(--glt);letter-spacing:.14em;display:block;margin-bottom:.4rem}
+footer p{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;opacity:.5}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(9px)}}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.rv.v{opacity:1;transform:none}
+@media(max-width:780px){.ow,.kw{grid-template-columns:1fr}.oa{display:none}}
+@media(max-width:520px){.nl{display:none}}
+</style>
 </head>
 <body>
 
 <nav>
-  <a class="nav-brand" href="#uvod">
+  <a class="nb" href="#uvod">
     <img src="logo.png" alt="TreePro logo">
-    <span class="nav-brand-name">TreePro</span>
+    <span class="nb-n">TreePro</span>
   </a>
-  <div class="nav-links">
+  <div class="nl">
     <a href="#sluzby">Služby</a>
     <a href="#o-nas">O nás</a>
     <a href="#reference">Reference</a>
     <a href="#proc-my">Proč my</a>
     <a href="#kontakt">Kontakt</a>
-    <a class="nav-ig" href="https://www.instagram.com/treepro_cz/" target="_blank" rel="noopener">
+    <a class="ig" href="https://www.instagram.com/treepro_cz/" target="_blank" rel="noopener">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       Instagram
     </a>
   </div>
 </nav>
 
-
 <section id="uvod">
-  <svg class="pd" style="top:-95px;left:-105px;width:430px;opacity:.13;" viewBox="0 0 430 430">
-    <ellipse cx="215" cy="218" rx="205" ry="192" fill="none" stroke="#5a7a52" stroke-width="16"/>
-    <ellipse cx="210" cy="222" rx="170" ry="158" fill="none" stroke="#5a7a52" stroke-width="12"/>
-    <ellipse cx="218" cy="215" rx="133" ry="122" fill="none" stroke="#5a7a52" stroke-width="10"/>
-    <ellipse cx="213" cy="219" rx="96" ry="87" fill="none" stroke="#5a7a52" stroke-width="8"/>
-    <ellipse cx="216" cy="216" rx="61" ry="54" fill="none" stroke="#5a7a52" stroke-width="6"/>
-    <ellipse cx="214" cy="218" rx="28" ry="23" fill="none" stroke="#5a7a52" stroke-width="5"/>
-    <ellipse cx="215" cy="217" rx="9" ry="8" fill="#5a7a52" opacity=".4"/>
-  </svg>
-  <svg class="pd" style="bottom:-75px;right:-85px;width:370px;opacity:.12;" viewBox="0 0 430 430">
-    <ellipse cx="215" cy="215" rx="200" ry="187" fill="none" stroke="#5a7a52" stroke-width="15"/>
-    <ellipse cx="210" cy="220" rx="163" ry="152" fill="none" stroke="#5a7a52" stroke-width="12"/>
-    <ellipse cx="218" cy="213" rx="125" ry="116" fill="none" stroke="#5a7a52" stroke-width="9"/>
-    <ellipse cx="213" cy="218" rx="88" ry="80" fill="none" stroke="#5a7a52" stroke-width="7"/>
-    <ellipse cx="216" cy="214" rx="53" ry="47" fill="none" stroke="#5a7a52" stroke-width="6"/>
-    <ellipse cx="214" cy="216" rx="22" ry="19" fill="none" stroke="#5a7a52" stroke-width="4"/>
-  </svg>
-  <svg class="pd" style="top:28%;right:3%;width:155px;opacity:.07;" viewBox="0 0 300 300">
-    <ellipse cx="150" cy="153" rx="140" ry="130" fill="none" stroke="#5a7a52" stroke-width="12"/>
-    <ellipse cx="147" cy="156" rx="107" ry="99" fill="none" stroke="#5a7a52" stroke-width="9"/>
-    <ellipse cx="153" cy="150" rx="74" ry="68" fill="none" stroke="#5a7a52" stroke-width="7"/>
-    <ellipse cx="149" cy="154" rx="42" ry="38" fill="none" stroke="#5a7a52" stroke-width="5"/>
-    <ellipse cx="151" cy="152" rx="16" ry="14" fill="none" stroke="#5a7a52" stroke-width="4"/>
-  </svg>
-
-  <p class="hero-url">www.treepro.cz</p>
-  <div class="hero-logo-wrap">
-    <img src="logo.png" alt="TreePro - Arboristika">
-  </div>
-  <h1 class="hero-h1">Arboristika<br>pro Střední Čechy</h1>
-  <p class="hero-sub">Profesionální péče o stromy · Rizikové kácení · Odborné posudky dřevin</p>
-  <a class="hero-cta" href="#kontakt">Nezávazná poptávka zdarma</a>
-  <div class="hero-scroll">naše služby</div>
+  <svg class="pd" style="top:-95px;left:-105px;width:430px;opacity:.13;" viewBox="0 0 430 430"><ellipse cx="215" cy="218" rx="205" ry="192" fill="none" stroke="#5a7a52" stroke-width="16"/><ellipse cx="210" cy="222" rx="170" ry="158" fill="none" stroke="#5a7a52" stroke-width="12"/><ellipse cx="218" cy="215" rx="133" ry="122" fill="none" stroke="#5a7a52" stroke-width="10"/><ellipse cx="213" cy="219" rx="96" ry="87" fill="none" stroke="#5a7a52" stroke-width="8"/><ellipse cx="216" cy="216" rx="61" ry="54" fill="none" stroke="#5a7a52" stroke-width="6"/><ellipse cx="214" cy="218" rx="28" ry="23" fill="none" stroke="#5a7a52" stroke-width="5"/></svg>
+  <svg class="pd" style="bottom:-75px;right:-85px;width:370px;opacity:.12;" viewBox="0 0 430 430"><ellipse cx="215" cy="215" rx="200" ry="187" fill="none" stroke="#5a7a52" stroke-width="15"/><ellipse cx="210" cy="220" rx="163" ry="152" fill="none" stroke="#5a7a52" stroke-width="12"/><ellipse cx="218" cy="213" rx="125" ry="116" fill="none" stroke="#5a7a52" stroke-width="9"/><ellipse cx="213" cy="218" rx="88" ry="80" fill="none" stroke="#5a7a52" stroke-width="7"/><ellipse cx="216" cy="214" rx="53" ry="47" fill="none" stroke="#5a7a52" stroke-width="6"/></svg>
+  <p class="hu">www.treepro.cz</p>
+  <div class="hl"><img src="logo.png" alt="TreePro - Arboristika"></div>
+  <h1 class="hh">Arboristika<br>Komplexní péče o stromy a zeleň</h1>
+  <p class="hs">Profesionální péče o stromy · Rizikové kácení · Odborné posudky dřevin</p>
+  <a class="hc" href="#kontakt">Nezávazná poptávka zdarma</a>
+  <div class="hsc">naše služby</div>
 </section>
 
-
 <section id="sluzby">
-  <div class="top-bar"></div>
+  <div class="tb"></div>
   <div class="si">
     <p class="eye rv">Co pro vás uděláme</p>
-    <h2 class="stitle rv">Naše arboristické služby</h2>
-    <p class="slead rv">Komplexní péče o stromy a zeleň pro soukromníky, obce i firmy. Ke každému stromu přistupujeme individuálně – s odborností, bezpečností a respektem k přírodě.</p>
-    <div class="svc-grid">
-      <div class="svc rv"><span class="svc-ico">🌳</span><h3>Péče o stromy a zeleň</h3><p>Komplexní arboristická péče o vaše dřeviny a okolní zeleň. Pravidelná údržba a odborné posouzení stavu pro soukromníky i obce.</p></div>
-      <div class="svc rv"><span class="svc-ico">🪓</span><h3>Rizikové kácení</h3><p>Bezpečné pokácení nebezpečných nebo poškozených stromů pomocí lezeckých technik. Kácíme i v těsných prostorech bez škody na okolí.</p></div>
-      <div class="svc rv"><span class="svc-ico">✂️</span><h3>Bezpečnostní, výchovné a zdravotní řezy</h3><p>Odborné prořezávání korun pro zdraví, stabilitu a estetiku stromu. Výchovné řezy mladých dřevin pro správný tvar a dlouhý život.</p></div>
-      <div class="svc rv"><span class="svc-ico">🪵</span><h3>Frézování a štěpkování</h3><p>Frézování pařezů pod úroveň terénu a zpracování dřevní hmoty do štěpky. Ekologická likvidace veškerého odpadu.</p></div>
-      <div class="svc rv"><span class="svc-ico">🔗</span><h3>Bezpečnostní vazby</h3><p>Instalace dynamických i statických vazeb pro nestabilní větve. Prodloužíme bezpečně život cenným stromům.</p></div>
-      <div class="svc rv"><span class="svc-ico">🔍</span><h3>Odborné hodnocení dřevin</h3><p>Certifikované posudky provozní bezpečnosti stromů jako podklady pro úřady, pojišťovny i správce nemovitostí.</p></div>
-      <div class="svc rv"><span class="svc-ico">🌿</span><h3>Údržba zahrad</h3><p>Pravidelná péče o zahrady, záhony a travní plochy. Sezónní práce od jara do zimy tak, aby vaše zahrada vždy vypadala perfektně.</p></div>
-      <div class="svc rv"><span class="svc-ico">🌱</span><h3>Výsadba stromů</h3><p>Výběr vhodných druhů, profesionální výsadba a záruční péče o nově vysazené stromy. Poradíme s výběrem druhu pro vaše podmínky.</p></div>
+    <h2 class="st rv">Naše arboristické služby</h2>
+    <p class="sl rv">Komplexní péče o stromy a zeleň pro soukromníky, obce i firmy. Ke každému stromu přistupujeme individuálně – s odborností, bezpečností a respektem k přírodě.</p>
+    <div class="sg">
+      <div class="sv rv"><span class="si2">🌳</span><h3>Péče o stromy a zeleň</h3><p>Komplexní arboristická péče o vaše dřeviny a okolní zeleň. Pravidelná údržba a odborné posouzení stavu pro soukromníky i obce.</p></div>
+      <div class="sv rv"><span class="si2">🪓</span><h3>Rizikové kácení</h3><p>Bezpečné pokácení nebezpečných nebo poškozených stromů pomocí lezeckých technik. Kácíme i v těsných prostorech bez škody na okolí.</p></div>
+      <div class="sv rv"><span class="si2">✂️</span><h3>Bezpečnostní, výchovné a zdravotní řezy</h3><p>Odborné prořezávání korun pro zdraví, stabilitu a estetiku stromu. Výchovné řezy mladých dřevin pro správný tvar a dlouhý život.</p></div>
+      <div class="sv rv"><span class="si2">🪵</span><h3>Frézování a štěpkování</h3><p>Frézování pařezů pod úroveň terénu a zpracování dřevní hmoty do štěpky. Ekologická likvidace veškerého odpadu.</p></div>
+      <div class="sv rv"><span class="si2">🔗</span><h3>Bezpečnostní vazby</h3><p>Instalace dynamických i statických vazeb pro nestabilní větve. Prodloužíme bezpečně život cenným stromům.</p></div>
+      <div class="sv rv"><span class="si2">🔍</span><h3>Odborné hodnocení dřevin</h3><p>Certifikované posudky provozní bezpečnosti stromů jako podklady pro úřady, pojišťovny i správce nemovitostí.</p></div>
+      <div class="sv rv"><span class="si2">🌿</span><h3>Údržba zahrad</h3><p>Pravidelná péče o zahrady, záhony a travní plochy. Sezónní práce od jara do zimy tak, aby vaše zahrada vždy vypadala perfektně.</p></div>
+      <div class="sv rv"><span class="si2">🌱</span><h3>Výsadba stromů</h3><p>Výběr vhodných druhů, profesionální výsadba a záruční péče o nově vysazené stromy. Poradíme s výběrem druhu pro vaše podmínky.</p></div>
     </div>
   </div>
 </section>
 
-
 <section id="o-nas">
   <div class="si">
-    <div class="onas-wrap">
+    <div class="ow">
       <div>
         <p class="eye rv">Kdo jsme</p>
-        <h2 class="stitle rv">O nás</h2>
-        <p class="slead rv" style="margin-bottom:1.4rem;">TreePro jsou Josef Morc a Adam Antonín – parta nadšenců do stromů, kteří spojili zkušenosti a odbornost a vybudovali firmu postavenou na certifikovaných postupech, moderním vybavení a osobním přístupu.</p>
+        <h2 class="st rv">O nás</h2>
+        <p class="rv" style="line-height:1.88;color:#446;font-size:.94rem;margin-bottom:1.2rem;">TreePro tvoří Josef Morc a Adam Antonín – dva nadšenci na práci se stromy, které spojuje vášeň pro obor, důraz na detail a chuť odvádět špičkovou práci. Na základě zkušeností jsme vybudovali firmu, která stojí na kvalitě, bezpečnosti a moderních postupech. Využíváme profesionální vybavení a ověřené technologie, díky kterým dokážeme efektivně řešit jak běžné úpravy, tak i náročné zásahy.</p>
+        <p class="rv" style="line-height:1.88;color:#446;font-size:.94rem;margin-bottom:1.2rem;">Zakládáme si na osobním přístupu, spolehlivosti a jasné komunikaci. Každou zakázku vnímáme jako vizitku naší práce – proto hledáme řešení, která dávají smysl nejen krátkodobě, ale i z dlouhodobého hlediska.</p>
         <p class="rv" style="line-height:1.88;color:#446;font-size:.94rem;">Každý zásah konzultujeme předem a dbáme na to, aby strom nebo zahrada zůstaly v co nejlepším stavu. Pracujeme čistě, bezpečně a s respektem k okolnímu prostředí. Nezáleží nám jen na rychlosti – záleží nám na výsledku a vaší spokojenosti.</p>
-        <div class="hlbox rv">
+        <div class="hb rv">
           💬 <strong>„Strom není překážka – je to živý organismus, který potřebuje péči a respekt."</strong><br>
           Ke každému stromu přistupujeme s odborností a zodpovědností.
         </div>
-        <div class="badges rv">
-          <span class="badge">✓ Pojištěná firma</span>
-          <span class="badge">✓ Certifikovaní arboristé</span>
-          <span class="badge">✓ Moderní vybavení</span>
-          <span class="badge">✓ Konzultace zdarma</span>
+        <div class="bg rv">
+          <span class="ba">✓ Osobitý přístup</span>
+          <span class="ba">✓ Bezpečnost na prvním místě</span>
+          <span class="ba">✓ Moderní vybavení</span>
+          <span class="ba">✓ Konzultace zdarma</span>
         </div>
       </div>
-      <div class="onas-art rv">
+      <div class="oa rv">
         <svg viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="190" cy="192" rx="178" ry="168" fill="#d4b896" opacity=".2"/>
           <ellipse cx="190" cy="192" rx="175" ry="165" fill="none" stroke="#9b7045" stroke-width="15" opacity=".52"/>
@@ -233,67 +174,58 @@
   </div>
 </section>
 
-
-<section id="reference" style="background:var(--cream);">
-  <div class="top-bar"></div>
+<section id="reference" style="background:var(--cr);">
+  <div class="tb"></div>
   <div class="si">
     <p class="eye rv">Naše práce</p>
-    <h2 class="stitle rv">Reference</h2>
-    <p class="slead rv">Fotografie a videa z našich zakázek – připravujeme pro vás.</p>
+    <h2 class="st rv">Reference</h2>
+    <p class="sl rv">Fotografie a videa z našich zakázek – připravujeme pro vás.</p>
   </div>
 </section>
 
-
 <section id="proc-my">
-  <div class="top-bar" style="background:linear-gradient(90deg,var(--brown-lt),var(--green-md),var(--brown));"></div>
+  <div class="tb" style="background:linear-gradient(90deg,var(--brl),var(--gmd),var(--br));"></div>
   <div class="si">
     <p class="eye rv" style="text-align:center;">Naše přednosti</p>
-    <h2 class="stitle rv" style="text-align:center;">Proč si vybrat TreePro?</h2>
-    <div class="proc-grid">
-      <div class="proc rv"><span class="proc-ico">🎓</span><h3>Odbornost</h3><p>Arboristé s praxí. Každý zásah provádíme podle aktuálních standardů péče o dřeviny.</p></div>
-      <div class="proc rv"><span class="proc-ico">🛡️</span><h3>Bezpečnost</h3><p>Pracujeme bezpečně a ohleduplně – žádné škody na vašem majetku.</p></div>
-      <div class="proc rv"><span class="proc-ico">⚡</span><h3>Rychlá odezva</h3><p>Rychlá reakce na poptávky. V urgentních případech jsme schopni zásahu do 24 hodin.</p></div>
-      <div class="proc rv"><span class="proc-ico">💬</span><h3>Osobní přístup</h3><p>Každý zákazník dostane individuální řešení. Vždy vysvětlíme co a proč děláme.</p></div>
-      <div class="proc rv"><span class="proc-ico">🌿</span><h3>Ekologie</h3><p>Šetrný přístup k přírodě. Dřevní hmotu zpracujeme do štěpky nebo odvezeme.</p></div>
-      <div class="proc rv"><span class="proc-ico">💰</span><h3>Férové ceny</h3><p>Transparentní nacenění bez skrytých poplatků. Cenová nabídka zdarma a bez závazků.</p></div>
+    <h2 class="st rv" style="text-align:center;">Proč si vybrat TreePro?</h2>
+    <div class="pg">
+      <div class="pi rv"><span class="pi2">🎓</span><h3>Odbornost</h3><p>Arboristé s praxí. Každý zásah provádíme podle aktuálních standardů péče o dřeviny.</p></div>
+      <div class="pi rv"><span class="pi2">🛡️</span><h3>Bezpečnost</h3><p>Pracujeme bezpečně a ohleduplně – žádné škody na vašem majetku.</p></div>
+      <div class="pi rv"><span class="pi2">⚡</span><h3>Rychlá odezva</h3><p>Rychlá reakce na poptávky. V urgentních případech jsme schopni zásahu do 24 hodin.</p></div>
+      <div class="pi rv"><span class="pi2">💬</span><h3>Osobní přístup</h3><p>Každý zákazník dostane individuální řešení. Vždy vysvětlíme co a proč děláme.</p></div>
+      <div class="pi rv"><span class="pi2">🌿</span><h3>Ekologie</h3><p>Šetrný přístup k přírodě. Dřevní hmotu zpracujeme do štěpky nebo odvezeme.</p></div>
+      <div class="pi rv"><span class="pi2">💰</span><h3>Férové ceny</h3><p>Transparentní nacenění bez skrytých poplatků. Cenová nabídka zdarma a bez závazků.</p></div>
     </div>
   </div>
 </section>
 
-
 <section id="kontakt">
-  <svg class="pd" style="bottom:-55px;right:-55px;width:250px;opacity:.07;" viewBox="0 0 400 400">
-    <ellipse cx="200" cy="200" rx="185" ry="172" fill="none" stroke="#5a7a52" stroke-width="13"/>
-    <ellipse cx="196" cy="204" rx="148" ry="137" fill="none" stroke="#5a7a52" stroke-width="10"/>
-    <ellipse cx="203" cy="197" rx="110" ry="101" fill="none" stroke="#5a7a52" stroke-width="8"/>
-    <ellipse cx="199" cy="202" rx="73" ry="65" fill="none" stroke="#5a7a52" stroke-width="6"/>
-    <ellipse cx="201" cy="199" rx="36" ry="31" fill="none" stroke="#5a7a52" stroke-width="4"/>
-  </svg>
+  <svg class="pd" style="bottom:-55px;right:-55px;width:250px;opacity:.07;" viewBox="0 0 400 400"><ellipse cx="200" cy="200" rx="185" ry="172" fill="none" stroke="#5a7a52" stroke-width="13"/><ellipse cx="196" cy="204" rx="148" ry="137" fill="none" stroke="#5a7a52" stroke-width="10"/><ellipse cx="203" cy="197" rx="110" ry="101" fill="none" stroke="#5a7a52" stroke-width="8"/><ellipse cx="199" cy="202" rx="73" ry="65" fill="none" stroke="#5a7a52" stroke-width="6"/><ellipse cx="201" cy="199" rx="36" ry="31" fill="none" stroke="#5a7a52" stroke-width="4"/></svg>
   <div class="si">
     <p class="eye rv">Domluvme se</p>
-    <h2 class="stitle rv">Kontakt</h2>
-    <div class="kontakt-wrap">
+    <h2 class="st rv">Kontakt</h2>
+    <div class="kw">
       <div>
-        <div class="ccard rv">
+        <div class="cc rv">
           <p class="cn">Josef Morc</p>
           <a href="tel:+420608809881">+420 608 809 881</a>
         </div>
-        <div class="ccard rv">
+        <div class="cc rv">
           <p class="cn">Adam Antonín</p>
           <a href="tel:+420605962266">+420 605 962 266</a>
         </div>
-        <div class="email-row rv">
+        <div class="er rv">
           <span>✉</span>
-          <a href="mailto:info@treepro.cz">info&#64;treepro.cz</a>
+          <a id="em" href="#">načítání...</a>
         </div>
         <div class="rv" style="margin-top:.5rem;">
-          <a class="ig-btn" href="https://www.instagram.com/treepro_cz/" target="_blank" rel="noopener">
+          <a class="ib" href="https://www.instagram.com/treepro_cz/" target="_blank" rel="noopener">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
             Sledujte nás na Instagramu
           </a>
         </div>
       </div>
-      <div class="kright rv">
+      <div class="kr rv">
         <h3>Poptejte nás zdarma</h3>
         <p>
           Zavolejte nebo napište – rádi probereme vaši situaci a přijedeme se podívat přímo k vám.
@@ -302,48 +234,51 @@
           Hlavní město Praha · Středočeský · Liberecký · Královéhradecký · Ústecký · Pardubický · Vysočina · Jihočeský · Plzeňský<br><br>
           Mladá Boleslav · Nymburk · Jičín · Praha · Mnichovo Hradiště · Liberec · Hradec Králové a další.
         </p>
-        <svg class="kpd" width="200" height="200" viewBox="0 0 400 400">
-          <ellipse cx="200" cy="200" rx="188" ry="174" fill="none" stroke="#fff" stroke-width="14"/>
-          <ellipse cx="196" cy="204" rx="150" ry="138" fill="none" stroke="#fff" stroke-width="11"/>
-          <ellipse cx="203" cy="197" rx="112" ry="103" fill="none" stroke="#fff" stroke-width="9"/>
-          <ellipse cx="199" cy="202" rx="74" ry="66" fill="none" stroke="#fff" stroke-width="7"/>
-          <ellipse cx="201" cy="199" rx="38" ry="33" fill="none" stroke="#fff" stroke-width="5"/>
-        </svg>
+        <svg class="kp" width="200" height="200" viewBox="0 0 400 400"><ellipse cx="200" cy="200" rx="188" ry="174" fill="none" stroke="#fff" stroke-width="14"/><ellipse cx="196" cy="204" rx="150" ry="138" fill="none" stroke="#fff" stroke-width="11"/><ellipse cx="203" cy="197" rx="112" ry="103" fill="none" stroke="#fff" stroke-width="9"/><ellipse cx="199" cy="202" rx="74" ry="66" fill="none" stroke="#fff" stroke-width="7"/><ellipse cx="201" cy="199" rx="38" ry="33" fill="none" stroke="#fff" stroke-width="5"/></svg>
       </div>
     </div>
   </div>
 </section>
 
-
 <footer>
-  <span class="footer-url">www.treepro.cz</span>
+  <span class="fu">www.treepro.cz</span>
   <p>© 2025 TreePro · Arboristika · Střední Čechy</p>
 </footer>
 
 <script>
-  const els = document.querySelectorAll('.rv');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('v'), i * 65);
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  els.forEach(el => obs.observe(el));
+// Email sestavený v JS - Cloudflare ho nerozpozná a nepřepíše soubor
+(function(){
+  var u='info',d='treepro.cz';
+  var a=document.getElementById('em');
+  a.href='mailto:'+u+'@'+d;
+  a.textContent=u+'@'+d;
+})();
 
-  const secs = document.querySelectorAll('section[id]');
-  const navAs = document.querySelectorAll('.nav-links a[href^="#"]');
-  window.addEventListener('scroll', () => {
-    let cur = '';
-    secs.forEach(s => { if (window.scrollY >= s.offsetTop - 115) cur = s.id; });
-    navAs.forEach(a => {
-      if (a.classList.contains('nav-ig')) return;
-      const active = a.getAttribute('href') === '#' + cur;
-      a.style.background = active ? 'var(--green-md)' : '';
-      a.style.color = active ? 'var(--dark)' : '';
-    });
-  }, { passive: true });
+// Scroll reveal
+var els=document.querySelectorAll('.rv');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e,i){
+    if(e.isIntersecting){
+      setTimeout(function(){e.target.classList.add('v')},i*65);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.08});
+els.forEach(function(el){obs.observe(el)});
+
+// Active nav
+var secs=document.querySelectorAll('section[id]');
+var navAs=document.querySelectorAll('.nl a[href^="#"]');
+window.addEventListener('scroll',function(){
+  var cur='';
+  secs.forEach(function(s){if(window.scrollY>=s.offsetTop-115)cur=s.id});
+  navAs.forEach(function(a){
+    if(a.classList.contains('ig'))return;
+    var active=a.getAttribute('href')==='#'+cur;
+    a.style.background=active?'var(--gmd)':'';
+    a.style.color=active?'var(--dk)':'';
+  });
+},{passive:true});
 </script>
 </body>
 </html>
